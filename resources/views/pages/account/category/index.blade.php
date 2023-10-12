@@ -179,17 +179,17 @@
             $('body').on('click', '#edit', function() {
                 var id = $(this).data('id');
                 var form = this;
-                $('.name_error').html('');
 
+                $('.name_error').html('');
                 //alert(id);
                 $.get("{{ route('account.category.index') }}" + '/' + id + '/edit', function(data) {
+                  
                     $('#modalCategory').modal('show');
                     $('#id').val(data.id);
                     $('#name').val(data.name);
 
 
                 })
-                // $(form)[0].reset();
             });
 
             //DELETE MENUS RECORD
