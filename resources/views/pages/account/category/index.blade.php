@@ -1,103 +1,101 @@
-@extends('layouts.app',['title' => 'Category Menu'])
+@extends('layouts.app', ['title' => 'Category Menu'])
 
 @section('content')
+    <div class="content">
 
-<div class="content">
+        <div class="container-fluid">
+            <div class="page-title-box">
 
-    <div class="container-fluid">
-        <div class="page-title-box">
-
-            <div class="row align-items-center ">
-                <div class="col-md-8">
-                    <div class="page-title-box">
-                        <h4 class="page-title">Data Table</h4>
+                <div class="row align-items-center ">
+                    <div class="col-md-8">
+                        <div class="page-title-box">
+                            <h4 class="page-title">Data Table</h4>
 
 
+                        </div>
                     </div>
-                </div>
 
-            </div>
-        </div>
-        <!-- end page-title -->
-
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-
-                        <button type="button" class="btn btn-primary waves-effect waves-light mb-3" data-toggle="modal"
-                            data-target="#modalCategory">Tambah</button>
-
-                        <table id="categorytable" class="table table-bordered dt-responsive nowrap"
-                            style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                            <thead>
-                                <tr>
-                                    <th width="10%">No</th>
-                                    <th width="60%">Name</th>
-                                    <th width="30%">Aksi</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-
-                            </tbody>
-                        </table>
-
-                    </div>
                 </div>
             </div>
-            <!-- end col -->
-        </div>
-        <!-- end row -->
+            <!-- end page-title -->
 
-        <!-- sample modal content -->
-        <div id="modalCategory" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title mt-0" id="myModalLabel">Modal Category</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <button type="button" class="btn btn-primary waves-effect waves-light mb-3" data-toggle="modal"
+                                data-target="#modalCategory">Tambah</button>
+
+                            <table id="categorytable" class="table table-bordered dt-responsive nowrap"
+                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th width="10%">No</th>
+                                        <th width="60%">Name</th>
+                                        <th width="30%">Aksi</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                </tbody>
+                            </table>
+
+                        </div>
                     </div>
-                    <form class="form-horizontal" id="goryForm" name="goryForm" method="POST">
-                        @csrf
-                        <div class="modal-body">
-                            <input type="hidden" name="id" id="id">
-                            <div class="col-12">
-                                <label for="username">Name</label>
-                                <input class="form-control" name="name" value="{{ old('name') }}" type="text" id="name"
-                                    placeholder="Name">
-                                <span class="text-danger error-text name_error"></span>
+                </div>
+                <!-- end col -->
+            </div>
+            <!-- end row -->
 
+            <!-- sample modal content -->
+            <div id="modalCategory" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title mt-0" id="myModalLabel">Modal Category</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form class="form-horizontal" id="goryForm" name="goryForm" method="POST">
+                            @csrf
+                            <div class="modal-body">
+                                <input type="hidden" name="id" id="id">
+                                <div class="col-12">
+                                    <label for="username">Name</label>
+                                    <input class="form-control" name="name" value="{{ old('name') }}" type="text"
+                                        id="name" placeholder="Name">
+                                    <span class="text-danger error-text name_error"></span>
+
+                                </div>
                             </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary waves-effect"
-                                data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary waves-effect waves-light">Save changes</button>
-                        </div>
-                    </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary waves-effect"
+                                    data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary waves-effect waves-light">Save
+                                    changes</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.modal-content -->
                 </div>
-                <!-- /.modal-content -->
+                <!-- /.modal-dialog -->
             </div>
-            <!-- /.modal-dialog -->
+            <!-- /.modal -->
+
         </div>
-        <!-- /.modal -->
+        <!-- container-fluid -->
 
     </div>
-    <!-- container-fluid -->
-
-</div>
-<!-- content -->
-
+    <!-- content -->
 @endsection
 @include('sweetalert::alert')
 @section('script')
-
-<script>
-    $(function() {
+    <script>
+        $(function() {
 
             $.ajaxSetup({
                 headers: {
@@ -133,7 +131,7 @@
                 })
             }
 
-             //ADD AND STORE NEW MENUS
+            //ADD AND STORE NEW MENUS
             $('#goryForm').on('submit', function(e) {
                 e.preventDefault();
                 var form = this;
@@ -152,18 +150,18 @@
                     },
 
                     success: function(data) {
-                       
-                        if (data.code == 0) {                    
+
+                        if (data.code == 0) {
                             $.each(data.error, function(prefix, val) {
                                 $(form).find('span.' + prefix + '_error').text(val[0]);
                             });
                         } else {
                             $(form)[0].reset();
-                          
+
                             $("#goryForm input:hidden").val('').trigger('change');
                             $('#categorytable').DataTable().ajax.reload(null, false);
-                           //show success message
-                        //    toastr.success(data.msg);
+                            //show success message
+                            //    toastr.success(data.msg);
                             Swal.fire({
                                 type: 'success',
                                 icon: 'success',
@@ -181,14 +179,15 @@
             $('body').on('click', '#edit', function() {
                 var id = $(this).data('id');
                 var form = this;
-              
+                $('.name_error').html('');
+
                 //alert(id);
                 $.get("{{ route('account.category.index') }}" + '/' + id + '/edit', function(data) {
                     $('#modalCategory').modal('show');
                     $('#id').val(data.id);
                     $('#name').val(data.name);
-                    
-                    
+
+
                 })
                 // $(form)[0].reset();
             });
@@ -215,12 +214,12 @@
                                 console.log(data)
                                 if (data.code == 1) {
                                     Swal.fire(
-                                    'Deleted!',
-                                    'Your file has been deleted.',
-                                    'success'
+                                        'Deleted!',
+                                        'Your file has been deleted.',
+                                        'success'
                                     )
                                     $('#categorytable').DataTable().ajax.reload(null,
-                                    false);
+                                        false);
                                 }
                             }
                         });
@@ -230,5 +229,5 @@
 
             });
         });
-</script>
+    </script>
 @endsection
