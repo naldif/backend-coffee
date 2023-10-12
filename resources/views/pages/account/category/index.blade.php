@@ -181,16 +181,18 @@
             $('body').on('click', '#edit', function() {
                 var id = $(this).data('id');
                 var form = this;
-              
+                // $(form).find('span.error-text').text('');
+                // $(form)[0].reset();
+                // $(this).find('form')[0].reset();
                 //alert(id);
                 $.get("{{ route('account.category.index') }}" + '/' + id + '/edit', function(data) {
+                  
                     $('#modalCategory').modal('show');
                     $('#id').val(data.id);
                     $('#name').val(data.name);
                     
                     
                 })
-                // $(form)[0].reset();
             });
 
             //DELETE MENUS RECORD
