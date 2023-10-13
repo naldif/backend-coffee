@@ -42,30 +42,23 @@
                         <p class="sub-title">DataTables has most features enabled by default, so all you need to do to use it with your own tables is to call the construction function: <code>$().DataTable();</code>.
                         </p>
 
-                        <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Position</th>
-                                    <th>Office</th>
-                                    <th>Age</th>
-                                    <th>Start date</th>
-                                    <th>Salary</th>
-                                </tr>
-                            </thead>
+                        <table id="menutable" class="table table-bordered dt-responsive nowrap"
+                        style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                            <tr>
+                                <th width="10%">No</th>
+                                <th width="40%">Name</th>
+                                <th width="20%">Category</th>
+                                <th width="20%">Image</th>
+                                <th width="30%">Price</th>
+                                <th width="30%">Aksi</th>
+                            </tr>
+                        </thead>
 
-                            <tbody>
-                                <tr>
-                                    <td>Tiger Nixon</td>
-                                    <td>System Architect</td>
-                                    <td>Edinburgh</td>
-                                    <td>61</td>
-                                    <td>2011/04/25</td>
-                                    <td>$320,800</td>
-                                </tr>
-                               
-                            </tbody>
-                        </table>
+                        <tbody>
+
+                        </tbody>
+                    </table>
 
                     </div>
                 </div>
@@ -80,4 +73,60 @@
 </div>
 <!-- content -->
 
+@endsection
+
+@section('script')
+    <script>
+        $(function() {
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $(document).ready(function() {
+                show_data_menu()
+            });
+
+            function show_data_menu() {
+                $('#menutable').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: '{!! url()->current() !!}'
+                    },
+                    columns: [
+                        {
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'name',
+                            name: 'name'
+                        },
+                        {
+                            data: 'category',
+                            name: 'category.name'
+                        },
+                        {
+                            data: 'image',
+                            name: 'image'
+                        },
+                        {
+                            data: 'price',
+                            name: 'price'
+                        },
+                        {
+                            data: 'action',
+                            name: 'action'
+                        },
+
+                    ]
+                })
+            }
+
+           
+        });
+    </script>
 @endsection
