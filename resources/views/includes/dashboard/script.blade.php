@@ -1,49 +1,36 @@
-<!-- jQuery  -->
-<script src="{{ asset('/be/assets/js/jquery.min.js') }}"></script>
-<script src="{{ asset('/be/assets/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('/be/assets/js/metismenu.min.js') }}"></script>
-<script src="{{ asset('/be/assets/js/jquery.slimscroll.js') }}"></script>
-<script src="{{ asset('/be/assets/js/waves.min.js') }}"></script>
+<!-- JAVASCRIPT -->
+<script src="{{ asset('/be/assets/libs/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('/be/assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('/be/assets/libs/metismenu/metisMenu.min.js') }}"></script>
+<script src="{{ asset('/be/assets/libs/simplebar/simplebar.min.js') }}"></script>
+<script src="{{ asset('/be/assets/libs/node-waves/waves.min.js') }}"></script>
 
-<script src="{{ asset('/be/plugins/apexchart/apexcharts.min.js') }}"></script>
-<script src="{{ asset('/be/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+<script src="{{ asset('/be/assets/libs/select2/js/select2.min.js') }}"></script>
 
-<!--Morris Chart-->
-<script src="{{ asset('/be/plugins/morris/morris.min.js') }}"></script>
-<script src="{{ asset('/be/plugins/raphael/raphael.min.js') }}"></script>
+<!-- Sweet Alerts js -->
+<script src="{{ asset('/be/assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
 
-<script src="{{ asset('/be/assets/pages/dashboard.init.js') }}"></script>
+<!-- Sweet alert init js-->
+<script src="{{ asset('/be/assets/js/pages/sweet-alerts.init.js') }}"></script>
+
+<!-- jquery.vectormap map -->
+<script src="{{ asset('/be/assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js') }}"></script>
+<script src="{{ asset('/be/assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-us-merc-en.js') }}"></script>
 
 <!-- Required datatable js -->
-<script src="{{ asset('/be/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{asset('/be/plugins/datatables/dataTables.bootstrap4.min.js')}}"></script>
-<!-- Buttons examples -->
-<script src="{{ asset('/be/plugins/datatables/dataTables.buttons.min.js') }}"></script>
-<script src="{{ asset('/be/plugins/datatables/buttons.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('/be/plugins/datatables/jszip.min.js') }}"></script>
-<script src="{{ asset('/be/plugins/datatables/pdfmake.min.js') }}"></script>
-<script src="{{ asset('/be/plugins/datatables/vfs_fonts.js') }}"></script>
-<script src="{{ asset('/be/plugins/datatables/buttons.html5.min.js') }}"></script>
-<script src="{{ asset('/be/plugins/datatables/buttons.print.min.js') }}"></script>
-<script src="{{ asset('/be/plugins/datatables/buttons.colVis.min.js') }}"></script>
-<!-- Sweet-Alert  -->
-<script src="{{ asset('/be/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-{{-- <script src="{{ asset('/be/assets/pages/sweet-alert.init.js') }}"></script> --}}
+<script src="{{ asset('/be/assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('/be/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+
 <!-- Responsive examples -->
-<script src="{{ asset('/be/plugins/datatables/dataTables.responsive.min.js') }}"></script>
-<script src="{{ asset('/be/plugins/datatables/responsive.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('/be/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ asset('/be/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js') }}"></script>
 
 <!-- Datatable init js -->
-<script src="{{ asset('/be/assets/pages/datatables.init.js') }}"></script>
+<script src="{{ asset('/be/assets/js/pages/datatables.init.js') }}"></script>
 
+<script src="{{ asset('/be/assets/js/pages/dashboard.init.js') }}"></script>
 
-{{-- <script src="
-https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js
-"></script>
-<link href="
-https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
-" rel="stylesheet"> --}}
-
+<script src="{{ asset('/be/assets/js/pages/form-advanced.init.js') }}"></script>
 
 <!-- App js -->
 <script src="{{ asset('/be/assets/js/app.js') }}"></script>

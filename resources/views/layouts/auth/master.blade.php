@@ -1,49 +1,38 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <title>{{ $title }}</title>
-    <meta content="Responsive admin theme build on top of Bootstrap 4" name="description" />
-    <meta content="Themesdesign" name="author" />
-    <link rel="shortcut icon" href="{{ asset('/be/assets/images/favicon.ico') }}">
+    <head>
+        
+        <meta charset="utf-8" />
+        <title>Login | Nazox - Admin & Dashboard Template</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+        <meta content="Themesdesign" name="author" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
 
-    <link href="{{ asset('/be/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet">
+        <!-- Bootstrap Css -->
+        <link href="{{ asset('/be/assets/css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
+        <!-- Icons Css -->
+        <link href="{{ asset('/be/assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+        <!-- App Css-->
+        <link href="{{ asset('/be/assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
 
-    <link href="{{ asset('/be/assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('/be/assets/css/metismenu.min.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('/be/assets/css/icons.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('/be/assets/css/style.css') }}" rel="stylesheet" type="text/css">
+    </head>
 
-</head>
+    <body class="auth-body-bg">
+        @yield('content')
 
-<body>
-    <div class="accountbg"></div>
 
-    <!-- Begin page -->
-    <div class="wrapper-page">
+        <!-- JAVASCRIPT -->
+        <script src="{{ asset('/be/assets/libs/jquery/jquery.min.js') }}"></script>
+        <script src="{{ asset('/be/assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ asset('/be/assets/libs/metismenu/metisMenu.min.js') }}"></script>
+        <script src="{{ asset('/be/assets/libs/simplebar/simplebar.min.js') }}"></script>
+        <script src="{{ asset('/be/assets/libs/node-waves/waves.min.js') }}"></script>
 
-        <div class="container">
-            @yield('content')
-            <!-- end row -->
-        </div>
-    </div>
+        <script src="{{ asset('/be/assets/js/app.js') }}"></script>
 
-    <!-- jQuery  -->
-    <script src="{{ asset('/be/assets/js/jquery.min.js') }}"></script>
-    <script src="{{ asset('/be/assets/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('/be/assets/js/metismenu.min.js') }}"></script>
-    <script src="{{ asset('/be/assets/js/jquery.slimscroll.js') }}"></script>
-    <script src="{{ asset('/be/assets/js/waves.min.js') }}"></script>
-
-    <script src="{{ asset('/be/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
-
-    <!-- App js -->
-    <script src="{{ asset('/be/assets/js/app.js') }}"></script>
-
-</body>
-
+    </body>
 </html>

@@ -1,57 +1,59 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
-<head>
-   
-    @stack('before-style')
+    <head>
+        
+        @include('includes.dashboard.style')
 
-    @include('includes.dashboard.style')
+    </head>
 
-    @stack('after-style')
-</head>
+    <body data-sidebar="dark">
+    
+    <!-- <body data-layout="horizontal" data-topbar="dark"> -->
 
-<body>
+        <!-- Begin page -->
+        <div id="layout-wrapper">
 
-    <!-- Begin page -->
-    <div id="wrapper">
+            
+            <header id="page-topbar">
+                @include('includes.dashboard.topbar')
+            </header>
 
-        <!-- Top Bar Start -->
-        <div class="topbar">
-            @include('includes.dashboard.topbar')
+            <!-- ========== Left Sidebar Start ========== -->
+            <div class="vertical-menu">
+
+                <div data-simplebar class="h-100">
+
+                    <!--- Sidemenu -->
+                    @include('includes.dashboard.sidebar')
+                    <!-- Sidebar -->
+                </div>
+            </div>
+            <!-- Left Sidebar End -->
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    @yield('content')
+                    
+                </div>
+                <!-- End Page-content -->
+               
+                <footer class="footer">
+                    @include('includes.dashboard.footer')
+                </footer>
+                
+            </div>
+            <!-- end main content-->
+
         </div>
-        <!-- Top Bar End -->
+        <!-- END layout-wrapper -->
 
-        <!-- ========== Left Sidebar Start ========== -->
-        <div class="left side-menu">
-            @include('includes.dashboard.sidebar')
-            <!-- Sidebar -left -->
-
-        </div>
-        <!-- Left Sidebar End -->
-
-        <!-- ============================================================== -->
-        <!-- Start right Content here -->
-        <!-- ============================================================== -->
-        <div class="content-page">
-            <!-- Start content -->
-                @yield('content')
-            <!-- content -->
-
-            <footer class="footer">
-                @include('includes.dashboard.footer')
-            </footer>
-
-        </div>
-        <!-- ============================================================== -->
-        <!-- End Right content here -->
-        <!-- ============================================================== -->
-
-    </div>
-    <!-- END wrapper -->
-
-    @include('includes.dashboard.script')
-
-</body>
+        @include('includes.dashboard.script')
+    </body>
 
 </html>

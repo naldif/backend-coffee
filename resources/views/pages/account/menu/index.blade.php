@@ -1,48 +1,28 @@
 @extends('layouts.app',['title' => 'Menu'])
 
 @section('content')
+<div class="container-fluid">
 
-<div class="content">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0">List Category</h4>
 
-    <div class="container-fluid">
-        <div class="page-title-box">
-
-            <div class="row align-items-center ">
-                <div class="col-md-8">
-                    <div class="page-title-box">
-                        <h4 class="page-title">Data Table</h4>
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                <a href="javascript:void(0);">Zegva</a>
-                            </li>
-                            <li class="breadcrumb-item">
-                                <a href="javascript:void(0);">Tables</a>
-                            </li>
-                            <li class="breadcrumb-item active">Data Table</li>
-                        </ol>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="float-right d-none d-md-block app-datepicker">
-                        <input type="text" class="form-control" data-date-format="MM dd, yyyy" readonly="readonly" id="datepicker">
-                        <i class="mdi mdi-chevron-down mdi-drop"></i>
-                    </div>
-                </div>
             </div>
         </div>
-        <!-- end page-title -->
+    </div>
+    <!-- end page title -->
 
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
 
-                        <h4 class="mt-0 header-title">Default Datatable</h4>
-                        <p class="sub-title">DataTables has most features enabled by default, so all you need to do to use it with your own tables is to call the construction function: <code>$().DataTable();</code>.
-                        </p>
+                    <button type="button" class="btn btn-primary waves-effect waves-light mb-3" data-bs-toggle="modal"
+                        data-bs-target="#modalMenu">Tambah</button>
 
-                        <table id="menutable" class="table table-bordered dt-responsive nowrap"
+                    <table id="menuTable" class="table table-bordered dt-responsive nowrap"
                         style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                             <tr>
@@ -55,27 +35,91 @@
                             </tr>
                         </thead>
 
+
                         <tbody>
 
                         </tbody>
                     </table>
 
-                    </div>
                 </div>
             </div>
-            <!-- end col -->
+        </div> <!-- end col -->
+    </div> <!-- end row -->
+
+    <!-- sample modal content -->
+    <div id="modalMenu" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title mt-0" id="myExtraLargeModalLabel">Modal Menu</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form class="form-horizontal" id="goryForm" name="goryForm" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="id">
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="username">Name</label>
+                                <input class="form-control" name="name" value="{{ old('name') }}" type="text" id="name"
+                                    placeholder="Name">
+                                <span class="text-danger error-text name_error"></span>
+
+                            </div>
+                            <div class="col-6">
+                                <label for="validationCustom01" class="form-label">Image</label>                           
+                                <input type="file" class="form-control" id="image" name="image">
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Single Select</label>
+                                    <select class="form-control select2" id="select2insidemodal">
+                                        <option>Select</option>
+                                       
+                                        <option value="CA">California</option>
+                                        <option value="NV">Nevada</option>
+                                        <option value="OR">Oregon</option>
+                                        <option value="WA">Washington</option>
+                                        
+                                        
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <label for="validationCustom01" class="form-label">Image</label>                           
+                                <input type="file" class="form-control" id="image" name="image">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary waves-effect"
+                            data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary waves-effect waves-light">Save
+                            changes</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
         </div>
-        <!-- end row -->
-
+        <!-- /.modal-dialog -->
     </div>
-    <!-- container-fluid -->
 
-</div>
-<!-- content -->
+    <!-- content -->
 
-@endsection
+    @endsection
 
-@section('script')
+    @section('script')
+    <script>
+        $(document).ready(function() {
+            $("#select2insidemodal").select2({
+                dropdownParent: $("#modalMenu")
+            });
+        });
+    </script>
     <script>
         $(function() {
 
@@ -90,7 +134,7 @@
             });
 
             function show_data_menu() {
-                $('#menutable').DataTable({
+                $('#menuTable').DataTable({
                     processing: true,
                     serverSide: true,
                     ajax: {
@@ -129,4 +173,4 @@
            
         });
     </script>
-@endsection
+    @endsection
