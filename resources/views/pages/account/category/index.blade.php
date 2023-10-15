@@ -1,101 +1,90 @@
 @extends('layouts.app', ['title' => 'Category Menu'])
 
 @section('content')
-    <div class="content">
+<div class="container-fluid">
 
-        <div class="container-fluid">
-            <div class="page-title-box">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0">List Category</h4>
 
-                <div class="row align-items-center ">
-                    <div class="col-md-8">
-                        <div class="page-title-box">
-                            <h4 class="page-title">Data Table</h4>
-
-
-                        </div>
-                    </div>
-
-                </div>
             </div>
-            <!-- end page-title -->
-
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-
-                            <button type="button" class="btn btn-primary waves-effect waves-light mb-3" data-toggle="modal"
-                                data-target="#modalCategory">Tambah</button>
-
-                            <table id="categorytable" class="table table-bordered dt-responsive nowrap"
-                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th width="10%">No</th>
-                                        <th width="60%">Name</th>
-                                        <th width="30%">Aksi</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-
-                                </tbody>
-                            </table>
-
-                        </div>
-                    </div>
-                </div>
-                <!-- end col -->
-            </div>
-            <!-- end row -->
-
-            <!-- sample modal content -->
-            <div id="modalCategory" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title mt-0" id="myModalLabel">Modal Category</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <form class="form-horizontal" id="goryForm" name="goryForm" method="POST">
-                            @csrf
-                            <div class="modal-body">
-                                <input type="hidden" name="id" id="id">
-                                <div class="col-12">
-                                    <label for="username">Name</label>
-                                    <input class="form-control" name="name" value="{{ old('name') }}" type="text"
-                                        id="name" placeholder="Name">
-                                    <span class="text-danger error-text name_error"></span>
-
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary waves-effect"
-                                    data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary waves-effect waves-light">Save
-                                    changes</button>
-                            </div>
-                        </form>
-                    </div>
-                    <!-- /.modal-content -->
-                </div>
-                <!-- /.modal-dialog -->
-            </div>
-            <!-- /.modal -->
-
         </div>
-        <!-- container-fluid -->
-
     </div>
-    <!-- content -->
+    <!-- end page title -->
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <button type="button" class="btn btn-primary waves-effect waves-light mb-3" data-bs-toggle="modal"
+                        data-bs-target="#modalCategory">Tambah</button>
+
+                    <table id="categoryTable" class="table table-bordered dt-responsive nowrap"
+                        style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                            <tr>
+                                <th width="10%">No</th>
+                                <th width="60%">Name</th>
+                                <th width="30%">Aksi</th>
+                            </tr>
+                        </thead>
+
+
+                        <tbody>
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div> <!-- end col -->
+    </div> <!-- end row -->
+
+    <!-- sample modal content -->
+    <div id="modalCategory" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title mt-0" id="myModalLabel">Modal Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form class="form-horizontal" id="goryForm" name="goryForm" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="id">
+                        <div class="col-12">
+                            <label for="username">Name</label>
+                            <input class="form-control" name="name" value="{{ old('name') }}" type="text" id="name"
+                                placeholder="Name">
+                            <span class="text-danger error-text name_error"></span>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary waves-effect"
+                            data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary waves-effect waves-light">Save
+                            changes</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+</div> <!-- container-fluid -->
+<!-- content -->
 @endsection
-@include('sweetalert::alert')
+
 @section('script')
-    <script>
-        $(function() {
+<script>
+    $(function() {
 
             $.ajaxSetup({
                 headers: {
@@ -108,7 +97,7 @@
             });
 
             function show_data_menu() {
-                $('#categorytable').DataTable({
+                $('#categoryTable').DataTable({
                     processing: true,
                     serverSide: true,
                     ajax: {
@@ -159,7 +148,7 @@
                             $(form)[0].reset();
 
                             $("#goryForm input:hidden").val('').trigger('change');
-                            $('#categorytable').DataTable().ajax.reload(null, false);
+                            $('#categoryTable').DataTable().ajax.reload(null, false);
                             //show success message
                             //    toastr.success(data.msg);
                             Swal.fire({
@@ -213,12 +202,15 @@
                             success: function(data) {
                                 console.log(data)
                                 if (data.code == 1) {
-                                    Swal.fire(
-                                        'Deleted!',
-                                        'Your file has been deleted.',
-                                        'success'
-                                    )
-                                    $('#categorytable').DataTable().ajax.reload(null,
+                                    Swal.fire({
+                                        type: 'success',
+                                        icon: 'success',
+                                        title: 'success',
+                                        text: `${data.msg}`,
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    });
+                                    $('#categoryTable').DataTable().ajax.reload(null,
                                         false);
                                 }
                             }
@@ -229,5 +221,5 @@
 
             });
         });
-    </script>
+</script>
 @endsection
