@@ -65,8 +65,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary waves-effect"
-                            data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal"
+                            onclick="resetErr()">Close</button>
                         <button type="submit" class="btn btn-primary waves-effect waves-light">Save
                             changes</button>
                     </div>
@@ -86,140 +86,145 @@
 <script>
     $(function() {
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $(document).ready(function() {
+            show_data_menu()
+        });
+
+        function show_data_menu() {
+            $('#categoryTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '{!! url()->current() !!}'
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex'
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action'
+                    },
+
+                ]
+            })
+        }
+
+        //ADD AND STORE NEW MENUS
+        $('#goryForm').on('submit', function(e) {
+            e.preventDefault();
+            var form = this;
+            console.log(form);
+            $.ajax({
+                url: "{{ route('account.category.store') }}",
+                // url:$(form).attr('action'),
+                method: $(form).attr('method'),
+                data: new FormData(form),
+                // data: new FormData(form),
+                processData: false,
+                dataType: 'json',
+                contentType: false,
+                beforeSend: function() {
+                    $(form).find('span.error-text').text('');
+                },
+
+                success: function(data) {
+
+                    if (data.code == 0) {
+                        $.each(data.error, function(prefix, val) {
+                            $(form).find('span.' + prefix + '_error').text(val[0]);
+                        });
+                    } else {
+                        $(form)[0].reset();
+
+                        $("#goryForm input:hidden").val('').trigger('change');
+                        $('#categoryTable').DataTable().ajax.reload(null, false);
+                        //show success message
+                        //    toastr.success(data.msg);
+                        Swal.fire({
+                            type: 'success',
+                            icon: 'success',
+                            title: 'success',
+                            text: `${data.msg}`,
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                        $('#modalCategory').modal('hide');
+                    }
                 }
             });
-
-            $(document).ready(function() {
-                show_data_menu()
-            });
-
-            function show_data_menu() {
-                $('#categoryTable').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: {
-                        url: '{!! url()->current() !!}'
-                    },
-                    columns: [{
-                            data: 'DT_RowIndex',
-                            name: 'DT_RowIndex'
-                        },
-                        {
-                            data: 'name',
-                            name: 'name'
-                        },
-                        {
-                            data: 'action',
-                            name: 'action'
-                        },
-
-                    ]
-                })
-            }
-
-            //ADD AND STORE NEW MENUS
-            $('#goryForm').on('submit', function(e) {
-                e.preventDefault();
-                var form = this;
-                console.log(form);
-                $.ajax({
-                    url: "{{ route('account.category.store') }}",
-                    // url:$(form).attr('action'),
-                    method: $(form).attr('method'),
-                    data: new FormData(form),
-                    // data: new FormData(form),
-                    processData: false,
-                    dataType: 'json',
-                    contentType: false,
-                    beforeSend: function() {
-                        $(form).find('span.error-text').text('');
-                    },
-
-                    success: function(data) {
-
-                        if (data.code == 0) {
-                            $.each(data.error, function(prefix, val) {
-                                $(form).find('span.' + prefix + '_error').text(val[0]);
-                            });
-                        } else {
-                            $(form)[0].reset();
-
-                            $("#goryForm input:hidden").val('').trigger('change');
-                            $('#categoryTable').DataTable().ajax.reload(null, false);
-                            //show success message
-                            //    toastr.success(data.msg);
-                            Swal.fire({
-                                type: 'success',
-                                icon: 'success',
-                                title: 'success',
-                                text: `${data.msg}`,
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-                            $('#modalCategory').modal('hide');
-                        }
-                    }
-                });
-            });
-
-            $('body').on('click', '#edit', function() {
-                var id = $(this).data('id');
-                var form = this;
-
-                $('.name_error').html('');
-                //alert(id);
-                $.get("{{ route('account.category.index') }}" + '/' + id + '/edit', function(data) {
-                  
-                    $('#modalCategory').modal('show');
-                    $('#id').val(data.id);
-                    $('#name').val(data.name);
-
-
-                })
-            });
-
-            //DELETE MENUS RECORD
-            $(document).on('click', '#delete', function() {
-                var id = $(this).data('id');
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You want to delete this Category ?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            type: "DELETE",
-                            url: "{{ route('account.category.store') }}" + '/' + id,
-
-                            success: function(data) {
-                                console.log(data)
-                                if (data.code == 1) {
-                                    Swal.fire({
-                                        type: 'success',
-                                        icon: 'success',
-                                        title: 'success',
-                                        text: `${data.msg}`,
-                                        showConfirmButton: false,
-                                        timer: 2000
-                                    });
-                                    $('#categoryTable').DataTable().ajax.reload(null,
-                                        false);
-                                }
-                            }
-                        });
-
-                    }
-                })
-
-            });
         });
+
+        $('body').on('click', '#edit', function() {
+            var id = $(this).data('id');
+            var form = this;
+
+            $('.name_error').html('');
+            //alert(id);
+            $.get("{{ route('account.category.index') }}" + '/' + id + '/edit', function(data) {
+                
+                $('#modalCategory').modal('show');
+                $('#id').val(data.id);
+                $('#name').val(data.name);
+
+
+            })
+        });
+
+        //DELETE MENUS RECORD
+        $(document).on('click', '#delete', function() {
+            var id = $(this).data('id');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to delete this Category ?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "DELETE",
+                        url: "{{ route('account.category.store') }}" + '/' + id,
+
+                        success: function(data) {
+                            console.log(data)
+                            if (data.code == 1) {
+                                Swal.fire({
+                                    type: 'success',
+                                    icon: 'success',
+                                    title: 'success',
+                                    text: `${data.msg}`,
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                                $('#categoryTable').DataTable().ajax.reload(null,
+                                    false);
+                            }
+                        }
+                    });
+
+                }
+            })
+
+        });
+    });   
+
+    function resetErr() {
+        $('.name_error').html('');
+    }     
+      
 </script>
 @endsection

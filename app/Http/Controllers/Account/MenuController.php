@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Account;
 
 use App\Models\Menu;
+use App\Models\Category;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Validator;
 
 class MenuController extends Controller
 {
@@ -15,6 +18,7 @@ class MenuController extends Controller
     public function index(Request $request)
     {
         // dd($data);
+        $category = Category::get();
         if ($request->ajax()) {
             $data = Menu::with('category')->get();
             return DataTables::of($data)
@@ -44,7 +48,7 @@ class MenuController extends Controller
                 ->make(true);
         }
 
-        return view('pages.account.menu.index');
+        return view('pages.account.menu.index', compact('category'));
     }
 
     /**
@@ -60,7 +64,63 @@ class MenuController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name'     => 'required|unique:categories,name',
+            'category_id' => 'required',
+            'price' => 'required',
+            'image' => 'required|mimes:png,jpg,jpeg|max:2048'
+        ],[
+            'name.required' => 'Menu tidak boleh kosong.', 
+            'name.unique' => 'Nama Menu sudah tersedia.', 
+            'category_id.required' => 'Category tidak boleh kosong',
+            'price.required' => 'Price tidak boleh kosong',
+            'image.required' => 'Gambar tidak boleh kosong',
+            'image.mime' => 'Format gambar harus png,jpg, jpeg',
+        ]);
+
+        if (!$validator->passes()) {
+            return response()->json(['code'=>0,'error'=>$validator->errors()->toArray()]);	
+        }else{
+            if ($request->file('image')) {
+            
+                //delete old file
+              
+                // Storage::delete($this->path . $request->image_txt);
+                //insert new file
+                $image = $request->file('image');
+                $image->storeAs($this->path, $image->hashName());
+                
+            }
+            $data = Menu::updateOrCreate([
+                'id' => $request->id
+            ], 
+            [
+                'name' => $request->name,
+                'category_id' => $request->category_id,
+                'image' => $image->hashName(),
+                'price' => $request->price,
+                'slug' => Str::slug($request->name, '-'),
+            ]);
+       
+        
+            if(!$data){
+                return response()->json(
+                    [
+                        'code'=>0,
+                        'msg'=>'Something went wrong',
+                        'data'=> $data
+                    ]
+                );
+            }else{
+                return response()->json(
+                    [
+                        'code'=>1,
+                        'msg'=>'Service has been successfully saved',
+                        'data'=> $data
+                    ]
+                );
+            }
+        }
     }
 
     /**
