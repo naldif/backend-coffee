@@ -17,8 +17,7 @@ return new class extends Migration
             $table->string('slug');
             $table->string('description');
             $table->string('image');
-            $table->unsignedInteger('menu_id');
-            $table->unsignedInteger('prov_id');
+            $table->unsignedInteger('cities_id');
             $table->unsignedInteger('user_id');
             $table->timestamps();
         });

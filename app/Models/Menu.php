@@ -15,7 +15,7 @@ class Menu extends Model
     use HasFactory, HasSlug, HasScope;
 
     protected $fillable = [
-        'name', 'category_id', 'image', 'price', 'slug'
+        'coffeeshop_id', 'name', 'category_id', 'image', 'price', 'slug'
     ];
 
     /**
@@ -29,11 +29,11 @@ class Menu extends Model
     }
 
     /**
-     * Get the coffeshop that owns the Menu
+     * Get the coffeeshop that owns the Menu
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function coffeshop(): BelongsTo
+    public function coffeeshop(): BelongsTo
     {
         return $this->belongsTo(CoffeeShop::class);
     }
