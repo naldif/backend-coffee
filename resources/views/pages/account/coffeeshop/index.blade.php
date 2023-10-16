@@ -1,83 +1,179 @@
 @extends('layouts.app',['title' => 'Coffee Shop'])
 
 @section('content')
+<div class="container-fluid">
 
-<div class="content">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0">List Coffee Shop</h4>
 
-    <div class="container-fluid">
-        <div class="page-title-box">
-
-            <div class="row align-items-center ">
-                <div class="col-md-8">
-                    <div class="page-title-box">
-                        <h4 class="page-title">Data Table</h4>
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                <a href="javascript:void(0);">Zegva</a>
-                            </li>
-                            <li class="breadcrumb-item">
-                                <a href="javascript:void(0);">Tables</a>
-                            </li>
-                            <li class="breadcrumb-item active">Data Table</li>
-                        </ol>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="float-right d-none d-md-block app-datepicker">
-                        <input type="text" class="form-control" data-date-format="MM dd, yyyy" readonly="readonly" id="datepicker">
-                        <i class="mdi mdi-chevron-down mdi-drop"></i>
-                    </div>
-                </div>
             </div>
         </div>
-        <!-- end page-title -->
-
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-
-                        <h4 class="mt-0 header-title">Default Datatable</h4>
-                        <p class="sub-title">DataTables has most features enabled by default, so all you need to do to use it with your own tables is to call the construction function: <code>$().DataTable();</code>.
-                        </p>
-
-                        <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Position</th>
-                                    <th>Office</th>
-                                    <th>Age</th>
-                                    <th>Start date</th>
-                                    <th>Salary</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <tr>
-                                    <td>Tiger Nixon</td>
-                                    <td>System Architect</td>
-                                    <td>Edinburgh</td>
-                                    <td>61</td>
-                                    <td>2011/04/25</td>
-                                    <td>$320,800</td>
-                                </tr>
-                               
-                            </tbody>
-                        </table>
-
-                    </div>
-                </div>
-            </div>
-            <!-- end col -->
-        </div>
-        <!-- end row -->
-
     </div>
-    <!-- container-fluid -->
+    <!-- end page title -->
 
-</div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <button type="button" class="btn btn-primary waves-effect waves-light mb-3" data-bs-toggle="modal"
+                        data-bs-target="#modalCoffeeShop">Tambah</button>
+
+                    <table id="coffeeshopTable" class="table table-bordered dt-responsive nowrap"
+                        style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                            <tr>
+                                <th width="10%">No</th>
+                                <th width="30%">Name</th>
+                                <th width="30%">Image</th>
+                                <th width="20%">City</th>
+                                <th width="20%">Aksi</th>
+                            </tr>
+                        </thead>
+
+
+                        <tbody>
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div> <!-- end col -->
+    </div> <!-- end row -->
+
+    <!-- sample modal content -->
+    <div id="modalCoffeeShop" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title mt-0" id="myModalLabel">Modal CoffeeShop</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form class="form-horizontal" id="goryForm" name="goryForm" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="id">
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="username">Name</label>
+                                <input class="form-control" name="name" value="{{ old('name') }}" type="text" id="name"
+                                    placeholder="Name">
+                                <span class="text-danger error-text name_error"></span>
+
+                            </div>
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label class="form-label">City</label>
+                                    <select class="form-control select2insidemodal select2" id="city_id" name="city _id">
+                                        <option>Select</option>
+                                        @foreach ($city as $item)
+                                            <option value="{{ $item->city_id }}">{{ $item->city_name }}</option>
+                                        @endforeach
+
+                                    </select>
+                                    <span class="text-danger error-text city_id_error"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label>Description</label>
+                                    <div>
+                                        <textarea class="form-control" name="description" id="description" rows="5"></textarea>
+                                        <span class="text-danger error-text description_error"></span>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="col-6">
+                                <label for="validationCustom01" class="form-label">Image</label>
+                                <input type="file" class="form-control" id="image" name="image">
+                                <span class="text-danger error-text image_error"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal"
+                            onclick="resetErr()">Close</button>
+                        <button type="submit" class="btn btn-primary waves-effect waves-light">Save
+                            changes</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+</div> <!-- container-fluid -->
 <!-- content -->
 
+@endsection
+
+@section('script')
+<script>
+    $(document).ready(function() {
+        $(".select2insidemodal").select2({
+            dropdownParent: $("#modalCoffeeShop")
+        });
+    });
+</script>
+<script>
+    $(function() {
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $(document).ready(function() {
+            show_data_menu()
+        });
+
+        function show_data_menu() {
+            $('#coffeeshopTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '{!! url()->current() !!}'
+                },
+                columns: [
+                    {
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex'
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'image',
+                        name: 'image'
+                    },
+                    {
+                        data: 'city',
+                        name: 'city'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action'
+                    },
+                ]
+            })
+        }
+    });
+
+    function resetErr() {
+        $('.name_error').html('');
+        $('.image_error').html('');
+        $('.price_error').html('');
+    }
+</script>
 @endsection

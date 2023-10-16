@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Account;
 
 use App\Models\Menu;
 use App\Models\Category;
+use App\Traits\HasImage;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 
 class MenuController extends Controller
 {
+   
     /**
      * Display a listing of the resource.
      */
@@ -65,15 +67,15 @@ class MenuController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name'     => 'required|unique:categories,name',
-            'category_id' => 'required',
-            'price' => 'required',
+            // 'name'     => 'required|unique:categories,name',
+            // 'category_id' => 'required',
+            // 'price' => 'required',
             'image' => 'required|mimes:png,jpg,jpeg|max:2048'
         ],[
-            'name.required' => 'Menu tidak boleh kosong.', 
-            'name.unique' => 'Nama Menu sudah tersedia.', 
-            'category_id.required' => 'Category tidak boleh kosong',
-            'price.required' => 'Price tidak boleh kosong',
+            // 'name.required' => 'Menu tidak boleh kosong.', 
+            // 'name.unique' => 'Nama Menu sudah tersedia.', 
+            // 'category_id.required' => 'Category tidak boleh kosong',
+            // 'price.required' => 'Price tidak boleh kosong',
             'image.required' => 'Gambar tidak boleh kosong',
             'image.mime' => 'Format gambar harus png,jpg, jpeg',
         ]);
@@ -81,14 +83,18 @@ class MenuController extends Controller
         if (!$validator->passes()) {
             return response()->json(['code'=>0,'error'=>$validator->errors()->toArray()]);	
         }else{
-            if ($request->file('image')) {
+            if ($files = $request->file('image')) {
             
                 //delete old file
               
                 // Storage::delete($this->path . $request->image_txt);
                 //insert new file
-                $image = $request->file('image');
-                $image->storeAs($this->path, $image->hashName());
+                $destinationPath = 'storage/'. $request->name; // upload path
+                $menuImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
+                $files->move($destinationPath, $menuImage);
+
+                // $image = $request->file('image');
+                // $image->storeAs($this->path, $request->name,$image->hashName());
                 
             }
             $data = Menu::updateOrCreate([
@@ -97,11 +103,11 @@ class MenuController extends Controller
             [
                 'name' => $request->name,
                 'category_id' => $request->category_id,
-                'image' => $image->hashName(),
+                'image' => $menuImage,
                 'price' => $request->price,
                 'slug' => Str::slug($request->name, '-'),
             ]);
-       
+            
         
             if(!$data){
                 return response()->json(
@@ -115,7 +121,7 @@ class MenuController extends Controller
                 return response()->json(
                     [
                         'code'=>1,
-                        'msg'=>'Service has been successfully saved',
+                        'msg'=>'Menus has been successfully saved',
                         'data'=> $data
                     ]
                 );

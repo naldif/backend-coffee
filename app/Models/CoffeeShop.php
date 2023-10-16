@@ -15,7 +15,7 @@ class CoffeeShop extends Model
     use HasFactory, HasSlug, HasScope;
 
     protected $fillable = [
-        'name', 'slug', 'menu_id', 'city_id', 'description', 'image', 'user_id'
+        'name', 'slug', 'city_id', 'description', 'image', 'user_id'
     ];
 
     /**
