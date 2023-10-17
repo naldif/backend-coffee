@@ -66,24 +66,35 @@ class CoffeeShopController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name'     => 'required|unique:categories,name',
+        $rules = [
+            'name' => 'required',
             'city_id' => 'required',
-            // 'image' => 'required|mimes:png,jpg,jpeg|max:2048'
-        ],[
-            'name.required' => 'Menu tidak boleh kosong.', 
-            'name.unique' => 'Nama Menu sudah tersedia.', 
+            'image' => 'required|mimes:png,jpg,jpeg|max:2048',
+        ];
+        
+        $messages = [
+            'name.required' => 'Menu tidak boleh kosong.',
             'city_id.required' => 'City tidak boleh kosong',
-            // 'image.required' => 'Gambar tidak boleh kosong',
-            'image.mime' => 'Format gambar harus png,jpg, jpeg',
-        ]);
+            'image.required' => 'Gambar tidak boleh kosong',
+            'image.mimes' => 'Format gambar harus png, jpg, jpeg',
+        ];
+
+        // Jika Anda sedang memperbarui data, abaikan validasi unik
+        if ($request->has('id')) {
+            $rules = [
+                'name' => 'required',
+                'city_id' => 'required',
+            ];
+            unset($rules['image']); // Validasi gambar dihapus saat memperbarui
+        }
+
+        $validator = Validator::make($request->all(), $rules, $messages);
 
         if (!$validator->passes()) {
             return response()->json(['code'=>0,'error'=>$validator->errors()->toArray()]);	
         }else{
             if ($request->hasFile('image')) {
             
-                
                 if(!empty($request->image_old)){
                     Storage::disk('public')->delete($request->image_old);
                 }
