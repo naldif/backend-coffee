@@ -69,12 +69,12 @@ class CoffeeShopController extends Controller
         $validator = Validator::make($request->all(), [
             'name'     => 'required|unique:categories,name',
             'city_id' => 'required',
-            'image' => 'required|mimes:png,jpg,jpeg|max:2048'
+            // 'image' => 'required|mimes:png,jpg,jpeg|max:2048'
         ],[
             'name.required' => 'Menu tidak boleh kosong.', 
             'name.unique' => 'Nama Menu sudah tersedia.', 
             'city_id.required' => 'City tidak boleh kosong',
-            'image.required' => 'Gambar tidak boleh kosong',
+            // 'image.required' => 'Gambar tidak boleh kosong',
             'image.mime' => 'Format gambar harus png,jpg, jpeg',
         ]);
 
@@ -83,12 +83,16 @@ class CoffeeShopController extends Controller
         }else{
             if ($request->hasFile('image')) {
             
+                
                 if(!empty($request->image_old)){
                     Storage::disk('public')->delete($request->image_old);
                 }
+         
                 $fol =  Str::lower($request->name);
                 $filePath = Storage::disk('public')->put(str_replace(' ', '', $fol), request()->file('image'));
-
+                
+            }else {
+                $filePath = $request->image_old;
             }
             $data = CoffeeShop::updateOrCreate([
                 'id' => $request->id
