@@ -40,6 +40,7 @@ class CoffeeShopController extends Controller
                     // ';
                     
                     return ' 
+                        <a href="'. route('account.coffeeshop.menu.index', $row->id) .'" class="btn btn-success waves-effect waves-light btn-sm" ><i class="fas fa-align-justify"></i></a>
                         <button class="btn btn-primary waves-effect waves-light btn-sm" data-id="'.$row['id'].'" id="edit"><i class="fas fa-pencil-alt"></i></button>
                         <button class="btn btn-danger waves-effect waves-light btn-sm" data-id="'.$row['id'].'" id="delete"><i class="fas fa-trash-alt"></i></button>
                     ';

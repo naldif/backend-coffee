@@ -24,13 +24,6 @@
                 </li>
 
                 <li>
-                    <a href="{{ route('account.menus.index') }}" class=" waves-effect {{ Route::is('account.menus*') ? 'active' : '' }}">
-                        <i class="ri-calendar-2-line"></i>
-                        <span>Menu</span>
-                    </a>
-                </li>
-
-                <li>
                     <a href="{{ route('account.coffeeshop.index') }}" class=" waves-effect {{ Route::is('account.coffeeshop*') ? 'active' : '' }}">
                         <i class="ri-calendar-2-line"></i>
                         <span>Coffee Shop</span>
