@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\City;
+use App\Models\Cities;
 use App\Models\Menu;
 use App\Models\User;
 use App\Traits\HasSlug;
 use App\Traits\HasScope;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CoffeeShop extends Model
@@ -15,7 +16,7 @@ class CoffeeShop extends Model
     use HasFactory, HasSlug, HasScope;
 
     protected $fillable = [
-        'name', 'slug', 'city_id', 'description', 'image', 'user_id'
+        'name', 'slug', 'cities_id', 'description', 'image', 'user_id'
     ];
 
     /**
@@ -39,13 +40,13 @@ class CoffeeShop extends Model
     }
 
     /**
-     * Get the city that owns the CoffeeShop
+     * Get the cities that owns the CoffeeShop
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function city(): BelongsTo
+    public function cities(): BelongsTo
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(Cities::class);
     }
 
     public function image(): Attribute

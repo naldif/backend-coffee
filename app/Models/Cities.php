@@ -4,9 +4,10 @@ namespace App\Models;
 
 use App\Models\CoffeeShop;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class City extends Model
+class Cities extends Model
 {
     use HasFactory;
 
