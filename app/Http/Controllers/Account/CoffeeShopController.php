@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Account;
 
-use App\Models\City;
+use App\Models\Cities;
 use App\Models\CoffeeShop;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Validator;
 
 class CoffeeShopController extends Controller
 {
@@ -16,12 +20,18 @@ class CoffeeShopController extends Controller
     public function index(Request $request)
     {
 
-        $city = City::get();
-        // dd($city);
+        $city = Cities::get();
+        // dd($data);
         if ($request->ajax()) {
-            $data = CoffeeShop::latest()->get();
+            $data = CoffeeShop::with('cities')->get();
             return DataTables::of($data)
                 ->addIndexColumn()
+                ->addColumn('cities', function ($CoffeeShop) {
+                    return $CoffeeShop->cities->city_name;
+                })
+                ->addColumn('image', function($item){
+                    return '<img style="width: 100px" src="'. Storage::url($item->image) .'"/>';
+                })
                 ->addColumn('action', function($row){
                   
                     // $btn = '<button class="btn btn-primary waves-effect waves-light btn-sm" data-id="'.$row['id'].'"  id="edit"><i class="fas fa-pencil-alt"></i></button> ';
@@ -37,7 +47,7 @@ class CoffeeShopController extends Controller
                 
                 })
               
-                ->rawColumns(['action'])
+                ->rawColumns(['action','image'])
                 ->make(true);
         }
         return view('pages.account.coffeeshop.index', compact('city'));
@@ -58,27 +68,57 @@ class CoffeeShopController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name'     => 'required|unique:categories,name',
+            'city_id' => 'required',
+            'image' => 'required|mimes:png,jpg,jpeg|max:2048'
         ],[
-            'name.required' => 'Nama Category tidak boleh kosong.', 
-            'name.unique' => 'Nama Category sudah tersedia.', 
+            'name.required' => 'Menu tidak boleh kosong.', 
+            'name.unique' => 'Nama Menu sudah tersedia.', 
+            'city_id.required' => 'City tidak boleh kosong',
+            'image.required' => 'Gambar tidak boleh kosong',
+            'image.mime' => 'Format gambar harus png,jpg, jpeg',
         ]);
 
         if (!$validator->passes()) {
             return response()->json(['code'=>0,'error'=>$validator->errors()->toArray()]);	
         }else{
-            $query = Category::updateOrCreate([
+            if ($request->hasFile('image')) {
+            
+                if(!empty($request->image_old)){
+                    Storage::disk('public')->delete($request->image_old);
+                }
+                $fol =  Str::lower($request->name);
+                $filePath = Storage::disk('public')->put(str_replace(' ', '', $fol), request()->file('image'));
+
+            }
+            $data = CoffeeShop::updateOrCreate([
                 'id' => $request->id
-            ],
+            ], 
             [
                 'name' => $request->name,
-          
+                'cities_id' => $request->city_id,
+                'image' => $filePath,
+                'description' => $request->description,
+                'slug' => Str::slug($request->name, '-'),
+                'user_id' => auth()->user()->id,
             ]);
-       
+            
         
-            if(!$query){
-                return response()->json(['code'=>0,'msg'=>'Something went wrong']);
+            if(!$data){
+                return response()->json(
+                    [
+                        'code'=>0,
+                        'msg'=>'Something went wrong',
+                        'data'=> $data
+                    ]
+                );
             }else{
-                return response()->json(['code'=>1,'msg'=>'Coffee Shop has been successfully saved']);
+                return response()->json(
+                    [
+                        'code'=>1,
+                        'msg'=>'CoffeeShop has been successfully saved',
+                        'data'=> $data
+                    ]
+                );
             }
         }
     }
@@ -94,9 +134,11 @@ class CoffeeShopController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $coffeeshop = CoffeeShop::with('cities')->findOrFail($id);
+        // dd($cs);
+        return response()->json($coffeeshop);
     }
 
     /**
@@ -110,8 +152,16 @@ class CoffeeShopController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(CoffeeShop $coffeeshop)
     {
-        //
+
+        Storage::disk('public')->delete($coffeeshop->image);
+        $query = $coffeeshop->delete();
+
+        if($query){
+            return response()->json(['code'=>1, 'msg'=>'Category has been deleted from database']);
+        }else{
+            return response()->json(['code'=>0, 'msg'=>'Something went wrong']);
+        }
     }
 }

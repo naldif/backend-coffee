@@ -67,15 +67,13 @@ class MenuController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            // 'name'     => 'required|unique:categories,name',
-            // 'category_id' => 'required',
-            // 'price' => 'required',
+            'name'     => 'required|unique:categories,name',
+            'price_id' => 'required',
             'image' => 'required|mimes:png,jpg,jpeg|max:2048'
         ],[
-            // 'name.required' => 'Menu tidak boleh kosong.', 
-            // 'name.unique' => 'Nama Menu sudah tersedia.', 
-            // 'category_id.required' => 'Category tidak boleh kosong',
-            // 'price.required' => 'Price tidak boleh kosong',
+            'name.required' => 'Menu tidak boleh kosong.', 
+            'name.unique' => 'Nama Menu sudah tersedia.', 
+            'price.required' => 'Price tidak boleh kosong',
             'image.required' => 'Gambar tidak boleh kosong',
             'image.mime' => 'Format gambar harus png,jpg, jpeg',
         ]);
