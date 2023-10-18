@@ -15,7 +15,7 @@ class Menu extends Model
     use HasFactory, HasSlug, HasScope;
 
     protected $fillable = [
-        'coffeeshop_id', 'name', 'category_id', 'image', 'price', 'slug'
+        'name', 'coffeeshop_id', 'category_id', 'image', 'price', 'slug'
     ];
 
     /**
