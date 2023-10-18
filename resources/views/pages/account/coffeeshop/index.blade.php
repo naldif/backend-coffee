@@ -240,7 +240,7 @@
 
     //DELETE MENUS RECORD
     $(document).on('click', '#delete', function() {
-        { var id = $(this).data('id');
+        var id = $(this).data('id');
         Swal.fire({
             title: 'Are you sure?',
             text: "You want to delete this Coffee Shop ?",
@@ -279,9 +279,14 @@
     });
 
     function resetErr() {
+        // $(form)[0].reset();
+        
         $('.name_error').html('');
         $('.image_error').html('');
         $('.city_id_error').html('');
+
+        $('#csForm')[0].reset();
+        $('#city_id').val('Select').trigger('change');
     }
 </script>
 @endsection

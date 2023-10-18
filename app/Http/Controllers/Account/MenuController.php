@@ -30,6 +30,9 @@ class MenuController extends Controller
                 ->addColumn('category', function ($menu) {
                     return $menu->category->name;
                 })
+                ->addColumn('image', function($item){
+                    return '<img style="width: 100px" src="'. Storage::url($item->image) .'"/>';
+                })
                 ->addColumn('action', function($row){
                   
                     // $btn = '<button class="btn btn-primary waves-effect waves-light btn-sm" data-id="'.$row['id'].'"  id="edit"><i class="fas fa-pencil-alt"></i></button> ';
@@ -48,7 +51,7 @@ class MenuController extends Controller
                     return 'Rp. '.number_format($item->price, 2, '.', ',');
                 })
               
-                ->rawColumns(['action'])
+                ->rawColumns(['action','image'])
                 ->make(true);
         }
 
@@ -137,9 +140,10 @@ class MenuController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($coffeeshop_id, $id)
     {
-        //
+        $menu = Menu::find($id);
+        return response()->json($menu);
     }
 
     /**
