@@ -55,10 +55,12 @@
                     <h5 class="modal-title mt-0" id="myExtraLargeModalLabel">Modal Menu</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form class="form-horizontal" id="menuForm" name="menuForm" method="POST">
+                <form class="form-horizontal" action="{{ route('account.coffeeshop.menu.store', $coffeeshop->id) }}" id="menuForm" name="menuForm" method="POST">
                     @csrf
                     <div class="modal-body">
                         <input type="hidden" name="id" id="id">
+                        <input type="hidden" name="coffeeshop_id" id="coffeeshop_id" value="{{ $coffeeshop->id }}">
+                        <input type="hidden" name="coffeeshop_name" id="coffeeshop_name" value="{{ $coffeeshop->name }}">
                         <div class="row">
                             <div class="col-6">
                                 <label for="username">Name</label>
@@ -70,6 +72,7 @@
                             <div class="col-6">
                                 <label for="validationCustom01" class="form-label">Image</label>
                                 <input type="file" class="form-control" id="image" name="image">
+                                <input type="text" type="" class="form-control" id="image_old" name="image_old">
                                 <span class="text-danger error-text image_error"></span>
                             </div>
                         </div>
@@ -172,57 +175,98 @@
             })
         }
 
-        
+    });
 
-        //ADD AND STORE NEW MENUS
-        $('#menuForm').on('submit', function(e) {
-            e.preventDefault();
-            var form = this;
-            console.log(form);
-            $.ajax({
-                url: "{{ route('account.menus.store') }}",
-                // url:$(form).attr('action'),
-                method: $(form).attr('method'),
-                data: new FormData(form),
-                // data: new FormData(form),
-                processData: false,
-                dataType: 'json',
-                contentType: false,
-                beforeSend: function() {
-                    $(form).find('span.error-text').text('');
+    //ADD AND STORE NEW MENUS
+    $('#menuForm').on('submit', function(e) {
+        e.preventDefault();
+        var form = this;
+        var coffeeshop_id = $('#coffeeshop_id').val();
+        console.log(form);
+        $.ajax({
+            url:$(form).attr('action'),
+            method: $(form).attr('method'),
+            data: new FormData(form),
+            // data: new FormData(form),
+            processData: false,
+            dataType: 'json',
+            contentType: false,
+            beforeSend: function() {
+                $(form).find('span.error-text').text('');
+            
+            },
+            success: function(data) {
                 
-                },
-                success: function(data) {
+                if (data.code == 0) {
+                    $.each(data.error, function(prefix, val) {
+                        $(form).find('span.' + prefix + '_error').text(val[0]);
+                    });
                     
-                    if (data.code == 0) {
-                        $.each(data.error, function(prefix, val) {
-                            $(form).find('span.' + prefix + '_error').text(val[0]);
-                        });
-                        
-                    } else {
-                        $(form)[0].reset();
-                        
+                } else {
+                    $(form)[0].reset();
+                    
 
-                        $("#menuForm input:hidden").val('').trigger('change');
-                        $('#menuTable').DataTable().ajax.reload(null, false);
-                        //show success message
-                        //    toastr.success(data.msg);
-                        Swal.fire({
-                            type: 'success',
-                            icon: 'success',
-                            title: 'success',
-                            text: `${data.msg}`,
-                            showConfirmButton: false,
-                            timer: 2000
-                        });
-                        
-                        $('#modalMenu').modal('hide');
-                    }
+                    $("#menuForm input:hidden").val('').trigger('change');
+                    $('#menuTable').DataTable().ajax.reload(null, false);
+                    //show success message
+                    //    toastr.success(data.msg);
+                    Swal.fire({
+                        type: 'success',
+                        icon: 'success',
+                        title: 'success',
+                        text: `${data.msg}`,
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
                     
+                    $('#modalMenu').modal('hide');
                 }
-            });
+                
+            }
         });
     });
+
+    //DELETE MENUS RECORD
+    $(document).on('click', '#delete', function() {
+        var id = $(this).data('id');
+        var coffeeshop_id = $('#coffeeshop_id').val();
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to delete this Coffee Shop ?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "DELETE",
+                    url: "{{ route('account.coffeeshop.index') }}" + '/' + coffeeshop_id +'/menu' + '/' + id,
+
+                    success: function(data) {
+                        console.log(data)
+                        if (data.code == 1) {
+                            Swal.fire({
+                                type: 'success',
+                                icon: 'success',
+                                title: 'success',
+                                text: `${data.msg}`,
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                            $('#menuTable').DataTable().ajax.reload(null,
+                                false);
+                        }
+                    }
+                });
+
+            }
+        })
+
+    });
+  
 
     function resetErr() {
         $('.name_error').html('');

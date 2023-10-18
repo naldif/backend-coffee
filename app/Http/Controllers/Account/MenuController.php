@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Account;
 use App\Models\Menu;
 use App\Models\Category;
 use App\Traits\HasImage;
+use App\Models\CoffeeShop;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 
@@ -17,12 +19,12 @@ class MenuController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(CoffeeShop $coffeeshop)
     {
         // dd($data);
         $category = Category::get();
-        if ($request->ajax()) {
-            $data = Menu::with('category')->get();
+        if (request()->ajax()) {
+            $data = Menu::with('category')->where('coffeeshop_id', $coffeeshop->id)->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('category', function ($menu) {
@@ -50,7 +52,7 @@ class MenuController extends Controller
                 ->make(true);
         }
 
-        return view('pages.account.menu.index', compact('category'));
+        return view('pages.account.menu.index', compact('category','coffeeshop'));
     }
 
     /**
@@ -68,7 +70,7 @@ class MenuController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name'     => 'required|unique:categories,name',
-            'price_id' => 'required',
+            'price' => 'required',
             'image' => 'required|mimes:png,jpg,jpeg|max:2048'
         ],[
             'name.required' => 'Menu tidak boleh kosong.', 
@@ -83,16 +85,12 @@ class MenuController extends Controller
         }else{
             if ($files = $request->file('image')) {
             
-                //delete old file
-              
-                // Storage::delete($this->path . $request->image_txt);
-                //insert new file
-                $destinationPath = 'storage/'. $request->name; // upload path
-                $menuImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
-                $files->move($destinationPath, $menuImage);
-
-                // $image = $request->file('image');
-                // $image->storeAs($this->path, $request->name,$image->hashName());
+                if(!empty($request->image_old)){
+                    Storage::disk('public')->delete($request->image_old);
+                }
+         
+                $folcs =  Str::lower($request->coffeeshop_name);
+                $filePath = Storage::disk('public')->put(str_replace(' ', '', $folcs), request()->file('image'));
                 
             }
             $data = Menu::updateOrCreate([
@@ -100,8 +98,9 @@ class MenuController extends Controller
             ], 
             [
                 'name' => $request->name,
+                'coffeeshop_id' => $request->coffeeshop_id,
                 'category_id' => $request->category_id,
-                'image' => $menuImage,
+                'image' => $filePath,
                 'price' => $request->price,
                 'slug' => Str::slug($request->name, '-'),
             ]);
@@ -154,8 +153,16 @@ class MenuController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($coffeeshop_id, $id)
     {
-        //
+        $menu = Menu::findOrFail($id);
+        Storage::disk('public')->delete($menu->image);
+        $query = $menu->delete();
+
+        if($query){
+            return response()->json(['code'=>1, 'msg'=>'Category has been deleted from database']);
+        }else{
+            return response()->json(['code'=>0, 'msg'=>'Something went wrong']);
+        }
     }
 }

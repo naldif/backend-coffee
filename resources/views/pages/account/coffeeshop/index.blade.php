@@ -240,43 +240,43 @@
 
     //DELETE MENUS RECORD
     $(document).on('click', '#delete', function() {
-            var id = $(this).data('id');
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You want to delete this Coffee Shop ?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
+        { var id = $(this).data('id');
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to delete this Coffee Shop ?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
 
-                if (result.isConfirmed) {
-                    $.ajax({
-                        type: "DELETE",
-                        url: "{{ route('account.coffeeshop.store') }}" + '/' + id,
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "DELETE",
+                    url: "{{ route('account.coffeeshop.store') }}" + '/' + id,
 
-                        success: function(data) {
-                            console.log(data)
-                            if (data.code == 1) {
-                                Swal.fire({
-                                    type: 'success',
-                                    icon: 'success',
-                                    title: 'success',
-                                    text: `${data.msg}`,
-                                    showConfirmButton: false,
-                                    timer: 2000
-                                });
-                                $('#coffeeshopTable').DataTable().ajax.reload(null,
-                                    false);
-                            }
+                    success: function(data) {
+                        console.log(data)
+                        if (data.code == 1) {
+                            Swal.fire({
+                                type: 'success',
+                                icon: 'success',
+                                title: 'success',
+                                text: `${data.msg}`,
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                            $('#coffeeshopTable').DataTable().ajax.reload(null,
+                                false);
                         }
-                    });
+                    }
+                });
 
-                }
-            })
+            }
+        })
 
-        });
+    });
 
     function resetErr() {
         $('.name_error').html('');

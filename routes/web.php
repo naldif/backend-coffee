@@ -25,7 +25,7 @@ Route::group(['prefix' => 'account', 'as' => 'account.', 'middleware' => ['auth'
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     Route::resource('/category', CategoryController::class);
-    Route::resource('/menus', MenuController::class);
+    // Route::resource('/menus', MenuController::class);
     Route::resource('/coffeeshop', CoffeeShopController::class);
     Route::resource('/coffeeshop.menu', MenuController::class);
 });
