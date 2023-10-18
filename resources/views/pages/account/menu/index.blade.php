@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0">List Menu</h4>
+                <h4 class="mb-sm-0">List Menu {{ $coffeeshop->name }}</h4>
 
             </div>
         </div>
@@ -18,8 +18,8 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-
-                    <button type="button" class="btn btn-primary waves-effect waves-light mb-3" data-bs-toggle="modal"
+                  
+                    <button type="button" class="btn btn-primary waves-effect waves-light mb-3 mt-10" data-bs-toggle="modal"
                         data-bs-target="#modalMenu">Tambah</button>
 
                     <table id="menuTable" class="table table-bordered dt-responsive nowrap"
@@ -55,12 +55,19 @@
                     <h5 class="modal-title mt-0" id="myExtraLargeModalLabel">Modal Menu</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form class="form-horizontal" action="{{ route('account.coffeeshop.menu.store', $coffeeshop->id) }}" id="menuForm" name="menuForm" method="POST">
+                <form class="form-horizontal" action="{{ route('account.coffeeshop.menu.store', $coffeeshop->id) }}" id="menuForm" name="menuForm" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <input type="hidden" name="id" id="id">
                         <input type="" name="coffeeshop_id" id="coffeeshop_id" value="{{ $coffeeshop->id }}">
-                        <input type="hidden" name="coffeeshop_name" id="coffeeshop_name" value="{{ $coffeeshop->name }}">
+        
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="username">Coffee Name</label>
+                               
+                                <input type="text" class="form-control" name="coffeeshop_name" id="coffeeshop_name" value="{{ $coffeeshop->name }}" @readonly(true)>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-6">
                                 <label for="username">Name</label>
@@ -98,6 +105,7 @@
                                 <span class="text-danger error-text price_error"></span>
                             </div>
                         </div>
+          
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal"
@@ -207,7 +215,7 @@
                     
                     $("#menuForm input:hidden").val('').trigger('change');
                     $("#category_id").val("Select").trigger( "change" );
-                    $('#menuTable').DataTable().ajax.reload(null, false);
+                   
                     //show success message
                     //    toastr.success(data.msg);
                     Swal.fire({
@@ -218,7 +226,7 @@
                         showConfirmButton: false,
                         timer: 2000
                     });
-                    
+                    $('#menuTable').DataTable().ajax.reload(null, false);
                     $('#modalMenu').modal('hide');
                 }
                 
@@ -229,7 +237,7 @@
     $('body').on('click', '#edit', function() {
         var id = $(this).data('id');
         var coffeeshop_id = $('#coffeeshop_id').val();
-        
+        alert(coffeeshop_id)
         $.get("{{ route('account.coffeeshop.index') }}" + '/' + coffeeshop_id +'/menu'+'/'+ id +'/edit', function(data) {
             console.log(data);
             $('#modalMenu').modal('show');
