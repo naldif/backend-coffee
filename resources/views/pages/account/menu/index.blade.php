@@ -59,7 +59,7 @@
                     @csrf
                     <div class="modal-body">
                         <input type="hidden" name="id" id="id">
-                        <input type="" name="coffeeshop_id" id="coffeeshop_id" value="{{ $coffeeshop->id }}">
+                        <input type="hidden" name="coffeeshop_id" id="coffeeshop_id" value="{{ $coffeeshop->id }}">
         
                         <div class="row">
                             <div class="col-6">
@@ -228,6 +228,8 @@
                     });
                     $('#menuTable').DataTable().ajax.reload(null, false);
                     $('#modalMenu').modal('hide');
+
+                    $('#coffeeshop_id').val(coffeeshop_id);
                 }
                 
             }
@@ -236,8 +238,9 @@
 
     $('body').on('click', '#edit', function() {
         var id = $(this).data('id');
-        var coffeeshop_id = $('#coffeeshop_id').val();
-        alert(coffeeshop_id)
+        // var coffeeshop_id = $('#coffeeshop_id input:hidden').val();
+        var coffeeshop_id = document.getElementById("coffeeshop_id").value;
+        // alert(coffeeshop_id)
         $.get("{{ route('account.coffeeshop.index') }}" + '/' + coffeeshop_id +'/menu'+'/'+ id +'/edit', function(data) {
             console.log(data);
             $('#modalMenu').modal('show');
