@@ -59,7 +59,7 @@
                     @csrf
                     <div class="modal-body">
                         <input type="hidden" name="id" id="id">
-                        <input type="hidden" name="coffeeshop_id" id="coffeeshop_id" value="{{ $coffeeshop->id }}">
+                        <input type="" name="coffeeshop_id" id="coffeeshop_id" value="{{ $coffeeshop->id }}">
                         <input type="hidden" name="coffeeshop_name" id="coffeeshop_name" value="{{ $coffeeshop->name }}">
                         <div class="row">
                             <div class="col-6">
@@ -205,8 +205,8 @@
                 } else {
                     $(form)[0].reset();
                     
-
                     $("#menuForm input:hidden").val('').trigger('change');
+                    $("#category_id").val("Select").trigger( "change" );
                     $('#menuTable').DataTable().ajax.reload(null, false);
                     //show success message
                     //    toastr.success(data.msg);
@@ -224,6 +224,24 @@
                 
             }
         });
+    });
+
+    $('body').on('click', '#edit', function() {
+        var id = $(this).data('id');
+        var coffeeshop_id = $('#coffeeshop_id').val();
+        
+        $.get("{{ route('account.coffeeshop.index') }}" + '/' + coffeeshop_id +'/menu'+'/'+ id +'/edit', function(data) {
+            console.log(data);
+            $('#modalMenu').modal('show');
+
+            $('#id').val(data.id);
+            $('#name').val(data.name);
+            $('#image_old').val(data.image);
+            $('#category_id').val(data.category_id).trigger('change');
+            $('#price').val(data.price);
+            
+        })
+        // $(form)[0].reset();
     });
 
     //DELETE MENUS RECORD
@@ -272,6 +290,9 @@
         $('.name_error').html('');
         $('.image_error').html('');
         $('.price_error').html('');
+
+        $('#menuForm')[0].reset();
+        $('#category_id').val('Select').trigger('change');
     }
 </script>
 @endsection
