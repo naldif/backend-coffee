@@ -62,9 +62,8 @@
                         <input type="hidden" name="coffeeshop_id" id="coffeeshop_id" value="{{ $coffeeshop->id }}">
         
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-6 mb-3">
                                 <label for="username">Coffee Name</label>
-                               
                                 <input type="text" class="form-control" name="coffeeshop_name" id="coffeeshop_name" value="{{ $coffeeshop->name }}" @readonly(true)>
                             </div>
                         </div>
@@ -76,28 +75,27 @@
                                 <span class="text-danger error-text name_error"></span>
 
                             </div>
-                            <div class="col-6">
-                                <label for="validationCustom01" class="form-label">Image</label>
-                                <input type="file" class="form-control" id="image" name="image">
-                                <input type="text" type="" class="form-control" id="image_old" name="image_old">
-                                <span class="text-danger error-text image_error"></span>
+                            <div class="col-6">                             
+                                <label class="form-label">Category</label>
+                                <select class="form-control select2insidemodal select2" id="category_id"
+                                    name="category_id">
+                                    <option>Select</option>
+                                    @foreach ($category as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+
+                                </select>
+                                <span class="text-danger error-text category_id_error"></span>                      
                             </div>
                         </div>
-                        <div class="row mt-3">
-                            <div class="col-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Category</label>
-                                    <select class="form-control select2insidemodal select2" id="category_id"
-                                        name="category_id">
-                                        <option>Select</option>
-                                        @foreach ($category as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                        @endforeach
-
-                                    </select>
-                                    <span class="text-danger error-text category_id_error"></span>
-                                </div>
+                        <div class="row mt-2">
+                             <div class="col-6">
+                                <label for="validationCustom01" class="form-label">Image</label>
+                                <input type="file" class="form-control" id="image" name="image">
+                                <input type="hidden" class="form-control" id="image_old" name="image_old">
+                                <span class="text-danger error-text image_error"></span>
                             </div>
+                            
                             <div class="col-6">
                                 <label for="validationCustom01" class="form-label">Price</label>
                                 <input type="number" name="price" id="price" class="form-control"
@@ -190,7 +188,8 @@
         e.preventDefault();
         var form = this;
         var coffeeshop_id = $('#coffeeshop_id').val();
-        console.log(form);
+        var image_old = $('#image_old').val();
+        // console.log(form);
         $.ajax({
             url:$(form).attr('action'),
             method: $(form).attr('method'),
@@ -230,6 +229,7 @@
                     $('#modalMenu').modal('hide');
 
                     $('#coffeeshop_id').val(coffeeshop_id);
+                    $('#image_old').val(image_old);
                 }
                 
             }
@@ -238,8 +238,8 @@
 
     $('body').on('click', '#edit', function() {
         var id = $(this).data('id');
-        // var coffeeshop_id = $('#coffeeshop_id input:hidden').val();
-        var coffeeshop_id = document.getElementById("coffeeshop_id").value;
+        var coffeeshop_id = $('#coffeeshop_id').val();
+        // var coffeeshop_id = document.getElementById("coffeeshop_id").value;
         // alert(coffeeshop_id)
         $.get("{{ route('account.coffeeshop.index') }}" + '/' + coffeeshop_id +'/menu'+'/'+ id +'/edit', function(data) {
             console.log(data);
