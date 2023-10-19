@@ -23,13 +23,18 @@ class CoffeeshopController extends Controller
         ], 200);
     }
 
-    public function show($id)
+    public function showByCity($cites_id)
     {
         //get detail data category with campaign
-        $coffeeshop = CoffeeShop::with('cities')->where('cities_id', $id)->get();
+        $coffeeshop = CoffeeShop::with('cities')->where('cities_id', $cites_id)->get();
         
-        if($coffeeshop) {
-
+        if($coffeeshop->isEmpty()) {
+            // Jika $menu kosong, kembalikan respons 404
+            return response()->json([
+                'success' => false,
+                'message' => 'Data Coffee Shop Tidak Ditemukan!',
+            ], 404);
+        }else{
             $coffeeshop = $coffeeshop->map(function($shop) {
                 $shop['city_name'] = $shop->cities->city_name;
                 unset($shop['cities']);
@@ -43,11 +48,27 @@ class CoffeeshopController extends Controller
                 'data'    => $coffeeshop,
             ], 200);
         }
+    }
 
-        //return with response JSON
-        return response()->json([
-            'success' => false,
-            'message' => 'Data Coffee Shop Tidak Ditemukan!',
-        ], 404);
+    public function showBySlug($slug)
+    {
+        //get detail data category with campaign
+        $coffeeshop = CoffeeShop::where('slug', $slug)->get();
+        
+        if($coffeeshop->isEmpty()) {
+            // Jika $menu kosong, kembalikan respons 404
+            return response()->json([
+                'success' => false,
+                'message' => 'Data Coffee Shop berdasarkan slug Tidak Ditemukan!',
+            ], 404);
+        }else{
+          
+            //return with response JSON
+            return response()->json([
+                'success' => true,
+                'message' => 'List Data CoffeeShop Berdasarkan slug' ,
+                'data'    => $coffeeshop,
+            ], 200);
+        }
     }
 }

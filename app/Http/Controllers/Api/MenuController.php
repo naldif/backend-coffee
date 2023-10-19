@@ -28,8 +28,13 @@ class MenuController extends Controller
         //get detail data category with campaign
         $menu = Menu::with('coffeeshop')->where('coffeeshop_id', $id)->get();
         
-        if($menu) {
-
+        if($menu->isEmpty()) {
+            // Jika $menu kosong, kembalikan respons 404
+            return response()->json([
+                'success' => false,
+                'message' => 'Data menu berdasarkan coffeeshop Tidak Ditemukan!',
+            ], 404);
+        }else{
             $menu = $menu->map(function($men) {
                 $men['coffeeshop_name'] = $men->coffeeshop->name;
                 unset($men['coffeeshop']);
@@ -43,11 +48,5 @@ class MenuController extends Controller
                 'data'    => $menu,
             ], 200);
         }
-
-        //return with response JSON
-        return response()->json([
-            'success' => false,
-            'message' => 'Data Coffee Shop Tidak Ditemukan!',
-        ], 404);
     }
 }
