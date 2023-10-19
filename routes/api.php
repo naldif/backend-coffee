@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\MenuController;
+use App\Http\Controllers\Api\CoffeeshopController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +19,12 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+/**
+ * Api Campaign
+ */
+Route::get('/coffeeshop', [CoffeeshopController::class, 'index']);
+Route::get('/coffeeshop/{id}', [CoffeeshopController::class, 'show']);
+
+Route::get('/menu', [MenuController::class, 'index']);
+Route::get('/menu/{id}', [MenuController::class, 'show']);
