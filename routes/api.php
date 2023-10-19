@@ -24,7 +24,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
  * Api Campaign
  */
 Route::get('/coffeeshop', [CoffeeshopController::class, 'index']);
-Route::get('/coffeeshop/{id}', [CoffeeshopController::class, 'show']);
+Route::get('/coffeeshop/{cites_id}', [CoffeeshopController::class, 'showByCity']);
+Route::get('/coffeeshop/detail/{slug}', [CoffeeshopController::class, 'showBySlug']);
 
 Route::get('/menu', [MenuController::class, 'index']);
 Route::get('/menu/{id}', [MenuController::class, 'show']);
