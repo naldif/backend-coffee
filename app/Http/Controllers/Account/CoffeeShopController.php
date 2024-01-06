@@ -68,13 +68,14 @@ class CoffeeShopController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required',
+            'name' => 'required|unique',
             'city_id' => 'required',
             'image' => 'required|mimes:png,jpg,jpeg|max:2048',
         ];
         
         $messages = [
-            'name.required' => 'Menu tidak boleh kosong.',
+            'name.required' => 'CoffeeShop tidak boleh kosong.',
+            'name.unique' => 'CoffeeShop sudah ada.',
             'city_id.required' => 'City tidak boleh kosong',
             'image.required' => 'Gambar tidak boleh kosong',
             'image.mimes' => 'Format gambar harus png, jpg, jpeg',
@@ -94,6 +95,7 @@ class CoffeeShopController extends Controller
         if (!$validator->passes()) {
             return response()->json(['code'=>0,'error'=>$validator->errors()->toArray()]);	
         }else{
+            
             if ($request->hasFile('image')) {
             
                 if(!empty($request->image_old)){
@@ -104,8 +106,19 @@ class CoffeeShopController extends Controller
                 $filePath = Storage::disk('public')->put(str_replace(' ', '', $fol), request()->file('image'));
                 
             }else {
-                $filePath = $request->image_old;
+                // $filePath = $request->image_old;
+
+                if (!empty($request->image_old)) {
+                    $filePath = $request->image_old;
+                } else {
+                    // Set default image path here or adjust this path according to your structure
+                    $defaultImagePath = Storage::url('img_default.jpg');
+                    // dd($defaultImagePath);
+                    $filePath = $defaultImagePath;
+                }
             }
+
+
             $data = CoffeeShop::updateOrCreate([
                 'id' => $request->id
             ], 
@@ -171,9 +184,10 @@ class CoffeeShopController extends Controller
     public function destroy(CoffeeShop $coffeeshop)
     {
 
-        Storage::disk('public')->delete($coffeeshop->image);
-        $query = $coffeeshop->delete();
-
+        // if($coffeeshop->image)
+        // Storage::disk('public')->delete($coffeeshop->image);
+        // $query = $coffeeshop->delete();
+        $query = is_null($coffeeshop->image) && Storage::delete($coffeeshop->image);
         if($query){
             return response()->json(['code'=>1, 'msg'=>'Category has been deleted from database']);
         }else{

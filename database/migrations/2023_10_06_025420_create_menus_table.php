@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('menus', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->unsignedBigInteger('coffeeshop_id');
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
-            $table->string('image');
-            $table->bigInteger('price');
+            $table->string('image')->nullable();
+            $table->bigInteger('price')->nullable();
             $table->string('slug');
             $table->timestamps();
 

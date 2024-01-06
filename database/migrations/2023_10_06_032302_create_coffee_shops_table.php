@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('coffee_shops', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('slug');
-            $table->string('description');
-            $table->string('image');
-            $table->unsignedInteger('cities_id');
-            $table->unsignedInteger('user_id');
+            $table->string('name')->nullable();
+            $table->string('slug')->nullable();
+            $table->string('description')->nullable();
+            $table->string('image')->nullable();
+            $table->unsignedInteger('cities_id')->nullable();
+            $table->unsignedInteger('user_id')->nullable();
             $table->timestamps();
         });
     }
